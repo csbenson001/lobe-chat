@@ -132,6 +132,12 @@
     ]
   },
   "overrides": {
+    "@types/react": "19.2.13",
+    "better-auth": "1.4.6",
+    "better-call": "1.1.8",
+    "drizzle-orm": "^0.45.1",
+    "fast-xml-parser": "5.4.2",
+    "pdfjs-dist": "5.4.530",
     "stylelint-config-clean-order": "7.0.0"
   },
   "dependencies": {
@@ -145,7 +151,7 @@
     "@azure-rest/ai-inference": "1.0.0-beta.5",
     "@azure/core-auth": "^1.10.1",
     "@better-auth/expo": "1.4.6",
-    "@better-auth/passkey": "^1.4.6",
+    "@better-auth/passkey": "1.4.6",
     "@cfworker/json-schema": "^4.1.1",
     "@clerk/localizations": "^3.32.1",
     "@clerk/nextjs": "^6.36.5",
