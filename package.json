@@ -132,6 +132,7 @@
     ]
   },
   "overrides": {
+    "@better-auth/core": "1.4.6",
     "better-auth": "1.4.6",
     "better-call": "1.1.8",
     "stylelint-config-clean-order": "7.0.0"
@@ -146,6 +147,7 @@
     "@aws-sdk/s3-request-presigner": "~3.932.0",
     "@azure-rest/ai-inference": "1.0.0-beta.5",
     "@azure/core-auth": "^1.10.1",
+    "@better-auth/core": "1.4.6",
     "@better-auth/expo": "1.4.6",
     "@better-auth/passkey": "1.4.6",
     "@cfworker/json-schema": "^4.1.1",
