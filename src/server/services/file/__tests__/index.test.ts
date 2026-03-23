@@ -96,15 +96,16 @@ describe('FileService', () => {
       );
     });
 
-    it('should delete file from db and throw error if file not found in storage', async () => {
+    it('should throw error but NOT delete file from db if file not found in storage', async () => {
       mockFileModel.findById.mockResolvedValue(mockFile);
       vi.mocked(service['impl'].getFileByteArray).mockRejectedValue({ Code: 'NoSuchKey' });
 
       await expect(service.downloadFileToLocal('test-file-id')).rejects.toThrow(
-        new TRPCError({ code: 'BAD_REQUEST', message: 'File not found' }),
+        new TRPCError({ code: 'BAD_REQUEST', message: 'File not found in storage' }),
       );
 
-      expect(mockFileModel.delete).toHaveBeenCalledWith('test-file-id', false);
+      // File record should NOT be deleted to avoid FK violations in messages_files
+      expect(mockFileModel.delete).not.toHaveBeenCalled();
     });
 
     it('should log error and rethrow for non-NoSuchKey errors', async () => {
@@ -113,12 +114,10 @@ describe('FileService', () => {
       vi.mocked(service['impl'].getFileByteArray).mockRejectedValue(originalError);
 
       await expect(service.downloadFileToLocal('test-file-id')).rejects.toThrow(
-        new TRPCError({ code: 'BAD_REQUEST', message: 'File content is empty' }),
+        new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to retrieve file' }),
       );
 
-      // 验证错误被记录到控制台
       expect(consoleErrorSpy).toHaveBeenCalledWith(originalError);
-      // 验证没有调用删除操作（因为不是NoSuchKey错误）
       expect(mockFileModel.delete).not.toHaveBeenCalled();
     });
 

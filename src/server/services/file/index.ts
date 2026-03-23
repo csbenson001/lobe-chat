@@ -215,11 +215,13 @@ export class FileService {
       content = await this.getFileByteArray(file.url);
     } catch (e) {
       console.error(e);
-      // if file not found, delete it from db
+      // Don't delete the file record on NoSuchKey - it causes FK violations
+      // in messages_files when the file is referenced by a message.
+      // The file may still be uploading or the error may be transient.
       if ((e as any).Code === 'NoSuchKey') {
-        await this.fileModel.delete(fileId, serverDBEnv.REMOVE_GLOBAL_FILE);
-        throw new TRPCError({ code: 'BAD_REQUEST', message: 'File not found' });
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'File not found in storage' });
       }
+      throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Failed to retrieve file' });
     }
 
     if (!content) throw new TRPCError({ code: 'BAD_REQUEST', message: 'File content is empty' });
